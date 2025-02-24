@@ -1,10 +1,14 @@
-chrome.tabs.query({}, tabs => {
-    const select = document.getElementById('tabList');
-    select.innerHTML = tabs.map(tab => 
-      `<option value="${tab.id}">${tab.title}</option>`
-    );
-    
-    select.addEventListener('change', (e) => {
-      chrome.storage.local.set({ backgroundTab: parseInt(e.target.value) });
-    });
-  });
+import updateTabs from "./updateTabList";
+
+// Initial update when popup opens
+updateTabs();
+
+// Periodic updates
+setInterval(updateTabs, 200);
+
+// Uncomment this if you want to update on tab changes
+// chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+//   if (changeInfo.title || changeInfo.status === 'loading') {
+//     updateTabs();
+//   }
+// });

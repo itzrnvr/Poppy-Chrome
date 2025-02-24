@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { experiments } = require('webpack');
 
 module.exports = {
   mode: "development",
@@ -19,6 +20,12 @@ module.exports = {
 
   module: {
     rules: [
+
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        type: "javascript/esm"
+      },
 
       {
         test: /\.(png|svg|jpg|jpeg|gif|ico|json)$/i,
@@ -48,4 +55,5 @@ module.exports = {
   optimization: {
     minimize: false,
   },
+
 };

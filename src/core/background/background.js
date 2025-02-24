@@ -23,7 +23,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
         target: { tabId: result.backgroundTab },
         func: (hasCompetingAudio) => {
           document.querySelectorAll('video, audio').forEach(media => {
-            media.volume = hasCompetingAudio ? 0.2 : 1.0;
+            media.volume = hasCompetingAudio ? 0.2 : 0.7;
           });
         },
         args: [changeInfo.audible]
