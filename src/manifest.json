@@ -5,7 +5,8 @@
   "description": "A helpful Chrome extension tool",
   "permissions": [
     "storage",
-    "activeTab"
+    "activeTab",
+    "scripting"
   ],
   "action": {
     "default_popup": "popup.html",

@@ -1,16 +1,33 @@
-// console.log("Background script loaded!");
-
-// Keep the service worker alive with an event listener
 chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed/updated");
 });
 
-// chrome.tabs.executeScript({
-//     code: 'console.log("addd")'
-// });
+let backgroundTabId = null;
 
+// Listen for storage changes
+chrome.storage.onChanged.addListener((changes) => {
+  if (changes.backgroundTab) {
+    backgroundTabId = changes.backgroundTab.newValue;
+    console.log(backgroundTabId)
+  }
+});
 
-  chrome.action.onClicked.addListener((tab) => {
-    // Optional: Add functionality when extension icon is clicked
-    console.log('Extension icon clicked');
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  if (!backgroundTabId) return; // Critical check [[6]]
+  
+  if (changeInfo.audible !== undefined && tabId !== backgroundTabId) {
+    chrome.storage.local.get(['backgroundTab'], (result) => {
+      if (!result.backgroundTab) return;
+      
+      chrome.scripting.executeScript({
+        target: { tabId: result.backgroundTab },
+        func: (hasCompetingAudio) => {
+          document.querySelectorAll('video, audio').forEach(media => {
+            media.volume = hasCompetingAudio ? 0.2 : 1.0;
+          });
+        },
+        args: [changeInfo.audible]
+      }).catch(error => console.debug('Target tab inactive'));
+    });
+  }
 });
