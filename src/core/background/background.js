@@ -5,9 +5,9 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log("Extension installed/updated");
 });
 
-chrome.tabs.executeScript({
-    code: 'console.log("addd")'
-});
+// chrome.tabs.executeScript({
+//     code: 'console.log("addd")'
+// });
 
 
   chrome.action.onClicked.addListener((tab) => {
